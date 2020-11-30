@@ -1,25 +1,24 @@
 version: '3'
 services:
-  #name of mysql container here
-
-  image: 'mysql:versionHere'
-  environment:
-    MYSQL_ROOT_PASSWORD=root
-    #above is minimum and may need more if there is account credentials issues
-  ports:
-    - 39061:3306
-
-  #above is for mySQL below is for the app the spring boot / java part
-  items-from-the-first-email-container:
-    image: 'name of spring / java container here'
-    ports:
-      - '8080:8080'
+  mysql-email-one:
+    image: 'mysql:8.0'
     environment:
-      SPRING_DATASOURCE_URL: jdbc:mysql://${MYSQL_HOST:localhost}:3306/email_one
-      SPRING_DATASOURCE_USERNAME: 'root'
-      SPRING_DATASOURCE_PASSWORD: 'root'
+      - MYSQL_ROOT_PASSWORD=otomopassword
+      - MYSQL_ROOT_USERNAME=otomo
+      - MYSQL_DATABASE=email_one
+    ports:
+      - "3307:3306"
+
+  items-from-the-first-email:
+    image: items-from-the-first-email
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql-email-one:3306/email_one
+      SPRING_DATASOURCE_USERNAME: "root"
+      SPRING_DATASOURCE_PASSWORD: "root"
     build:
-      context: './'
-      dockerfile: 'Dockerfile'
+      context: "./"
+      dockerfile: "Dockerfile"
     depends_on:
-      - #name of sql container above here
+      - mysql-email-one
