@@ -8,7 +8,7 @@ import java.util.Optional;
 @RestController
 public class UserController {
     @Autowired
-    private UserDaoService service;
+    private UserService service;
 
     //GET all users
     @GetMapping("/users")
